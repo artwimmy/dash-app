@@ -400,7 +400,7 @@ server = dash_app.server
 dash_app.title = 'ELA Strategy Selector'
 #dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
 dash_app.layout = dbc.Container(
-    children=[html.Img(src=app.get_asset_url('newimage.png')), card1, card3],
+    children=[html.Img(src=dash_app.get_asset_url('newimage.png')), card1, card3],
     className='dbc',
     # style = {
     #    'textAlign' : 'left',
