@@ -34,7 +34,7 @@ plt.style.use('ggplot')
 
 
 test = pd.read_csv(r'Final.csv')
-#test = pd.read_csv(r'C:\Users\Jonas Hasle\OneDrive\Skrivebord\Final.csv')
+#test = pd.read_csv(r'.\Final.csv')
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
