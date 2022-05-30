@@ -392,14 +392,14 @@ card3 = dbc.Card(children=[html.Br(),
 import json
 
 theme = dbc.themes.BOOTSTRAP
-app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[theme],
+dash_app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[theme],
            meta_tags=[{'name' :'viewport',
                        'content':'width=device-width, initial-scale=0.5'}])
-server = app.server
+server = dash_app.server
 
-app.title = 'ELA Strategy Selector'
+dash_app.title = 'ELA Strategy Selector'
 #dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
-app.layout = dbc.Container(
+dash_app.layout = dbc.Container(
     children=[html.Img(src=app.get_asset_url('newimage.png')), card1, card3],
     className='dbc',
     # style = {
@@ -414,7 +414,7 @@ app.layout = dbc.Container(
 )
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_rev_growth_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_rev_growth(factor):
@@ -424,7 +424,7 @@ def update_rev_growth(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_asset_turnover_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_asset_turnover(factor):
@@ -434,7 +434,7 @@ def update_asset_turnover(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_gross_margin_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_gross_margin(factor):
@@ -444,7 +444,7 @@ def update_gross_margin(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_operating_margin_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_operating_margin(factor):
@@ -454,7 +454,7 @@ def update_operating_margin(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_market_cap_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_market_cap(factor):
@@ -464,7 +464,7 @@ def update_market_cap(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_equity_growth_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_equity_growth(factor):
@@ -474,7 +474,7 @@ def update_equity_growth(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_div_yield_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_div_yield(factor):
@@ -484,7 +484,7 @@ def update_div_yield(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_div_growth_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_div_growth(factor):
@@ -494,7 +494,7 @@ def update_div_growth(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_ROE_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_roe(factor):
@@ -504,7 +504,7 @@ def update_roe(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_ROA_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_roa(factor):
@@ -514,7 +514,7 @@ def update_roa(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_PS_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_ps(factor):
@@ -524,7 +524,7 @@ def update_ps(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_PCF_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_pcf(factor):
@@ -534,7 +534,7 @@ def update_pcf(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_five_sales_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_five_sales(factor):
@@ -544,7 +544,7 @@ def update_five_sales(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_five_marg_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_five_marg(factor):
@@ -554,7 +554,7 @@ def update_five_marg(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_PE_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_pe(factor):
@@ -564,7 +564,7 @@ def update_pe(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('slider_PB_wrapper', 'style'),
     [Input('factors', 'value')])
 def update_pb(factor):
@@ -574,7 +574,7 @@ def update_pb(factor):
         return {'display': 'none'}
 
 
-@app.callback(
+@dash_app.callback(
     Output('my_output', "children"),
     Output('my_output2', "data"),
     Output('my_output3', "data"),
@@ -731,7 +731,7 @@ def update_frame(factors, assetturns, revenueg, grossmarg, opmarg, market, divg,
     # df_no_nan.sort_values(['country'], inplace = True)
 
 
-@app.callback(
+@dash_app.callback(
     Output(component_id='price_plot', component_property='figure'),
     Input(component_id='my_output2', component_property='data'),
     Input(component_id='my_dates', component_property='start_date'),
@@ -790,7 +790,7 @@ def create_graph(df_f, starts, ends):
     return fig_close
 
 
-@app.callback(
+@dash_app.callback(
     Output(component_id='sector_pie', component_property='figure'),
     Input(component_id='my_output3', component_property='data'), prevent_initial_callback=True)
 # This dataframe has 244 lines, but 4 distinct values for `day`
@@ -811,4 +811,4 @@ def create_sector_pie(dat):
 
     
 if __name__ == '__main__': 
-    app.run_server(debug=True)
+    dash_app.run_server(debug=True)
