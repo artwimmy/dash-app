@@ -22,16 +22,6 @@ import plotly.graph_objects as go
 #from dash import dcc
 from dash import dash_table as dt
 import dash
-import os
-import pathlib
-
-import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output, State
-
-import plotly.graph_objs as go
-import dash_daq as daq
 import math
 
 #import dash_table_experiments as dt
@@ -51,7 +41,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 #test = frame[~frame['Sector'].isin(['Healthcare', 'Energy'])]
 #test['size score'] = test.groupby('Sector')['Market Cap'].rank(ascending=True)
 
-returns = pd.read_csv(r'returnssmall.csv') #index=False)
+returns = pd.read_csv(r'returns.csv') #index=False)
 returns = returns[['Date', 'Symbols','Close', 'Volume']]
 returns['Date'] = pd.to_datetime(returns['Date'])
 
@@ -141,8 +131,7 @@ datepicker = dcc.DatePickerRange(
     min_date_allowed = datetime(2015, 1, 1),   # allow user to go back as far as January the 1st, 2015
     max_date_allowed = datetime.today(),       # user cannot select future dates
     start_date = datetime(2021, 1, 1),
-    end_date = datetime.today(),
-    #className='header'
+    end_date = datetime.today()
 )
 factors = dcc.Dropdown(
     id = 'factors',                
@@ -151,30 +140,27 @@ factors = dcc.Dropdown(
     multi = True,
     clearable = True,
     searchable=True,
-    #optionHeight= 50,
-    placeholder="Select Factors",
-    style = {'color': 'black'}
-            #'display': 'inline-block'
-
+    placeholder="Select Factors"
 )
 
 from dateutil.relativedelta import relativedelta
 import datetime
 import json
 
-#theme = dbc.themes.BOOTSTRAP
-app = Dash(__name__, suppress_callback_exceptions=True, #external_stylesheets=[theme],
+theme = dbc.themes.BOOTSTRAP
+app = Dash(__name__, suppress_callback_exceptions=True, external_stylesheets=[theme],
            meta_tags=[{'name' :'viewport',
                        'content':'width=device-width, initial-scale=0.5'}])
 server = app.server
 
 description = """
-** An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and 
-weight the factors according to your preference. The stocks are then ranked providing you the top stocks to buy according to your inputs. **
+An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and 
+weight the factors according to your preference. The stocks are then ranked providing you the top stocks to buy according to your inputs.
 """
 
 explanation = """
-## Abbreviations ##
+
+Abbreviations:
 
 MRQ : Most Recent Quarter
 
@@ -184,7 +170,7 @@ ANN: Annualized Value
 
 TTM : Trailing Twelve Months
 
-## Factors: ##
+Factors:
 
 Assets Turnover: Revenue MRQ / Average of Total Assets Most Recent Year
 
@@ -205,18 +191,16 @@ def build_banner():
     return html.Div(
         id="banner",
         className="banner",
-        style={'width':'auto', 'marginRight':'auto'},
         children=[
             html.Div(
                 id="banner-logo",
                 children=[
                     html.Button(id="learn-more-button",
-                                children=dcc.Markdown(["** DEFINITIONS **"], style={'height':'50%', 'width':'100%'}, className='banner button'),
+                                children="DEFINITIONS",
                                 n_clicks=0),
-                ], className='banner-logo'
-
-            )
-        ]
+                ],
+            ),
+        ],
     )
 
 
@@ -233,64 +217,55 @@ def generate_modal():
                                                      id="markdown_close",
                                                      n_clicks=0,
                                                      className="closeButton",
-                                                    # style={'marginLeft': 2}
-                                                     ),
+                                                     style={'marginLeft': 2}),
                             ),
                             html.Div(
                                 className="markdown-text",
-                                children=dcc.Markdown(children=(
-                                    explanation),
+                                children=dcc.Markdown(children=(explanation),
                                                       style={
-
-                                                      #    'marginLeft': 200,
-                                                      #    'marginRight': 200,
-                                                      #    'backgroundColor':
-                                                      #    'lightgreen',
-                                                          'color': 'white'
-                                                      }
-                    ),
+                                                          'marginLeft': 200,
+                                                          'marginRight': 200,
+                                                          'backgroundColor':
+                                                              'lightgreen',
+                                                          'color': 'black'
+                                                      }),
                             ),
                         ],
                     )))
 
 
-
-card1 = html.Div([
+card1 = dbc.Container(
+    [
         dbc.Card(
-            children=[html.Div([
-            #            html.Div(
-            #            className="app-header",
-            #                children=[
-            #                html.Div('Plotly Dash', className="app-header--title")
-            #                    ]
-            #                ),
+            children=[
                 html.Div([
                     html.Img(src=app.get_asset_url('newimage.png'),
                              style={
                                  'height': '30%',
-                                 'width': '15%'
-                             }
-    ),
-                  dcc.Markdown(
-                    "# **Strategy Finder**",)], className='header'),
+                                 'width': '30%'
+                             })
+                ],
+                    style={'marginLeft': '42%'
+                           }),  # 'marginRight':200, 'marginLeft':400}),
+                dcc.Markdown(
+                    "# **Strategy Finder**",
                     # className='text-center text-primary mb-4',
-                   # style={
-                   #     'textAlign': 'center',
-                   #     'color': 'black'
-    #                }
-
-                #html.Br(),
+                    style={
+                        'textAlign': 'center',
+                        'color': 'black'
+                    }),
+                html.Br(),
                 # dbc.Row(
                 # dbc.Col(dcc.Markdown("# **Strategy Finder**",
                 # className='text-center text-primary mb-4',
                 #                style={'textAlign':'center', 'color':'black'}),
                 #        width=12)),#'font-style': ['bold'],
 
-                #     html.H1('Strategy Finder', |              |,
-                # ),
+                #     html.H1('Strategy Finder', style={'textAlign':'center','font-style': ['bold']}), #style={'textAlign': 'center','backgroundColor':'#E23744','color': 'white','font-family':['Open Sans','sans-serif'],
+                # 'font-style': ['italic'],'padding-top':'20px','padding-bottom':'20px','fontSize':17}),
                 # html.Label('Select the weights you wish to assign to each factor'),
                 # html.Br(),
-                dcc.Markdown(description, style={'font-style': ['bold'],'color': 'white','padding-top':'5px','padding-bottom':'5px','fontSize':22}, className='header'),
+                dcc.Markdown(description),
                 html.Br(),
                 factors,
                 # dcc.Interval(max_intervals=1, id='inter'),
@@ -316,8 +291,7 @@ card1 = html.Div([
                                     "always_visible": True
                                 })
                         ],
-                        style={'display': 'block'},
-                             className = 'table-users')),
+                        style={'display': 'block'})),
                 dbc.Row(
                     html.Div(
                         id='slider_asset_turnover_wrapper',
@@ -336,8 +310,7 @@ card1 = html.Div([
                                     "always_visible": True
                                 })
                         ],
-                        style={'display': 'block'},
-                             className = 'table-users')),
+                        style={'display': 'block'})),
                 dbc.Row(
                     html.Div(
                         id='slider_gross_margin_wrapper',
@@ -356,8 +329,7 @@ card1 = html.Div([
                                     "always_visible": True
                                 })
                         ],
-                        style={'display': 'block'},
-                             className = 'table-users')),
+                        style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_operating_margin_wrapper',
                              children=[
@@ -373,8 +345,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_market_cap_wrapper',
                              children=[
@@ -390,8 +361,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className='table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_equity_growth_wrapper',
                              children=[
@@ -407,8 +377,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_div_growth_wrapper',
                              children=[
@@ -424,8 +393,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_div_yield_wrapper',
                              children=[
@@ -441,8 +409,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_ROE_wrapper',
                              children=[
@@ -458,8 +425,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_ROA_wrapper',
                              children=[
@@ -475,8 +441,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_PS_wrapper',
                              children=[
@@ -492,8 +457,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_PCF_wrapper',
                              children=[
@@ -509,8 +473,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_five_sales_wrapper',
                              children=[
@@ -526,8 +489,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_five_marg_wrapper',
                              children=[
@@ -543,9 +505,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')
-                             ),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_PE_wrapper',
                              children=[
@@ -561,8 +521,7 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
                 dbc.Row(
                     html.Div(id='slider_PB_wrapper',
                              children=[
@@ -578,29 +537,23 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'})),
 
                 # style={"width": "auto"}) ,
                 dcc.Store(id='my_output2'),
-                dcc.Store(id='my_output3')],
-                style={'padding-bottom': '50px'},
-                className='table-users')],body=True)],
-
-        #className='header',
-        style={
-        #'padding-bottom': '100px',
-        #'backgroundColor': 'white',
-        'width': 'auto'}
-        )
-
+                dcc.Store(id='my_output3')
+            ],
+            body=True)
+    ],
     # width={'size' :'8', 'offset':3, 'margin':3},
-
-    #}
+    style={
+        'backgroundColor': 'white',
+        'width': 1700
+    },
     # xs=12, sm=12, md=12, lg=5, xl=5,
     # style={'width':'auto', 'textAlign' : 'center', },
     # className = 'container',
-
+)
 
 # style={"width": "18rem"})
 # card2 = dbc.Card(html.Div(id='table_2'))
@@ -610,103 +563,91 @@ card1 = html.Div([
 #     #dbc.Container(id = 'table_2')],
 #             className = 'container'))
 
-cardtable = html.Div(children=[
+cardtable = dbc.Container(children=[
     dbc.Card(
-        children=[html.Div([
-            html.H2("Results")], className='header'),
-
+        children=[
             dbc.Row(
-
                 dbc.Col(
                     id='my_output',
-                    className = 'table-users',
                     # width={'size': 1700},
 
-                     style={
-                     'width': 1600,
-                     'height': 350}
+                    # style={
+                    # 'width': 1600,
+                    # 'marginRight': 500}
                 ))
-        ], style={'height': 525},
-        className='table-users',
+        ], className='container',
+
         body=True)
-], #style={
-   # 'height': 700,
-   # 'width': 1700
-  #  'backgroundColor': 'white',
-  #  'textAlign': 'center'})
-#}
-)
+], style={
+    'height': 700,
+    'width': 1700,
+    'backgroundColor': 'white',
+    'textAlign': 'center'})
 
-card3 = html.Div(
+card3 = dbc.Container(
     children=[
-        dbc.Card(body=True,
-            children=[html.Div([
-                #html.Br(),
-
-                html.Div([html.H2('Resulting Stocks Performance',
+        dbc.Card(
+            children=[
+                html.Br(),
+                datepicker,
+                html.H2('Resulting Stocks Performance',
                         style={'textAlign': 'center'}),
-                dbc.Row(datepicker)],className = 'header'),
-                dbc.Row(children=[dcc.Graph(id='price_plot', style={'height':500})], className='table-users'),
-                #html.Br(),
-                html.Div([html.H2('Distribution of Sectors')],style={'textAlign': 'center'}, className = 'header'),
+                dbc.Row(children=[dcc.Graph(id='price_plot')]),
+                html.Br(),
+                html.H2('Distribution of Sectors', style={'textAlign': 'center'}),
                 dbc.Row(
+                    dbc.Col(
                         children=[
-                            dcc.Graph(id='sector_pie', style={'textAlign':'center', 'width': 'auto', 'height':600}, className = 'donut')]
-                        #],  # , s))],
-                    #    className="container"
-
-
-         #   body=True
-        ) #className='table-users')
-])]
-    #style={
-    #    'backgroundColor': 'white',
-    #    'width': 1700
-    #},
-   # className=
-   # fluid=False
-    )], className = 'table-users')
+                            dcc.Graph(id='sector_pie')
+                        ],  # , style={'textAlign':'center', 'marginRight' : 500}, width= 'auto'))],
+                        className='container'))
+            ],
+            body=True)
+    ],
+    style={
+        'backgroundColor': 'white',
+        'width': 1700
+    },
+    fluid=False)
 
 header = html.Div(children=[
-    html.H1(
+    dcc.Markdown(
         "# **Strategy Finder**",
         # className='text-center text-primary mb-4',
-     #   style={
-     #       'textAlign': 'center',
-     #       'color': 'black'
- #       }
-)
+        style={
+            'textAlign': 'center',
+            'color': 'black'
+        })
 ])
 
 #from dateutil.relativedelta import relativedelta
 #import datetime
 import json
-#app.css.config.serve_locally = True
-#app.scripts.config.serve_locally = True
+
 
 app.title = 'ELA Strategy Selector'
 #dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
-app.layout = html.Div(
-    className= 'big-app-container',
-    children=[html.Div(className='app-container', children=[build_banner()]), generate_modal(),  card1, cardtable, card3,
-              ]#generate_modal(),
+app.layout = dbc.Container(
+    children=[build_banner(), card1, cardtable, card3,
+              generate_modal()],
+    className='dbc',
     # style = {
     #    'textAlign' : 'left',
     #    'backgroundColor' : 'lightblue',
     #    'color' : 'black'
     # }
-    #style={
-    #    'textAlign': 'left',
-    #    'backgroundColor': '#398B93',
-    #    'color': 'black',
-    #    'font-family': ['Open Sans', 'sans-serif'],
-    # 'font-style': ['bold'],
-    #    'padding-top': '15px',
-    #    'padding-bottom': '40px',
-    #    'fontSize': 19
-    #},
-    #fluid=True)
-)
+    style={
+        'textAlign': 'left',
+        'backgroundColor': 'lightblue',
+        'color': 'black',
+        'font-family': ['Open Sans', 'sans-serif'],
+        'font-style': ['bold'],
+        'padding-top': '15px',
+        'padding-bottom': '40px',
+        'fontSize': 19
+    },
+    fluid=True)
+
 
 @app.callback(Output('slider_rev_growth_wrapper', 'style'),
               [Input('factors', 'value')])
@@ -1099,8 +1040,7 @@ def update_frame(factors,
                                style_data={
                                    'whiteSpace': 'normal',
                                    'height': 12,
-                                   'width': 'auto',
-                                   'font-family': ['Open Sans', 'sans-serif']
+                                   'width': 'auto'
                                },
                                style_cell={
                                    'padding': '5px',
@@ -1116,8 +1056,7 @@ def update_frame(factors,
                                    'backgroundColor': 'white',
                                    'fontWeight': 'bold',
                                    'whiteSpace': 'normal',
-                                   'border': '2px solid black',
-                                   'font-family': ['Open Sans', 'sans-serif']
+                                   'border': '2px solid black'
                                },
                                style_data_conditional=[  # style_data.c refers only to data rows
                                    {
@@ -1138,13 +1077,9 @@ def update_frame(factors,
                                    'height': '800px',
                                    'overflowX': 'auto',
                                    # 'overflowY': 'None',
-                                   'width': 'auto',
-                                   #'font-family': ['Open Sans', 'sans-serif']
-                               },
-                               style_filter={'textAlign':'center','font-style': ['bold'],'font-family':['Open Sans','sans-serif']}
-                               #style={'textAlign':'center','font-style': ['bold'],'font-family':['Open Sans','sans-serif']}, #style={'textAlign': 'center','backgroundColor':'#E23744',,
+                                   'width': 'auto'
+                               })
 
-        )
         table1 = filtered_df['Ticker'].to_json(date_format='iso', orient='split')
         table2 = filtered_df.to_json()
         return tablee1, table1, table2
@@ -1204,13 +1139,12 @@ def create_graph(df_f, starts, ends, df=returns):
 
     fig_close.update_xaxes(showgrid=False)
     fig_close.update_yaxes(tickformat=".1%")
-    init = 1
+
     fig_close.add_trace(
         go.Scatter(x=sumreturns['Date'],
                    y=sumreturns['Cumulative Percentage Return'],
                    name="Strategy"))
     fig_close.layout.plot_bgcolor = 'white'
-
     return fig_close
 
 
@@ -1220,12 +1154,11 @@ def create_sector_pie(dat):
     df_l = pd.read_json(dat).dropna()
     fig = px.pie(df_l['Sector'],
                  values=df_l['Sector'].value_counts(),
-                 names=df_l['Sector'].unique(),
-                 hole=.7)
+                 names=df_l['Sector'].unique())
     fig.update_layout(
         title="",
         title_x=0.19,
-         title_y = 0.5,
+        # title_y = 0.5,
         margin={
             'l': 0,
             'r': 0
@@ -1255,7 +1188,7 @@ def update_click_output(button_click, close_click):
 
     
 if __name__ == '__main__': 
-    app.run_server(debug=True, port=8060)
+    app.run_server(debug=True)
 
 
 
