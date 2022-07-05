@@ -31,7 +31,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 
 import plotly.graph_objs as go
-import dash_daq as daq
+#import dash_daq as daq
 import math
 
 #import dash_table_experiments as dt
@@ -51,7 +51,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 #test = frame[~frame['Sector'].isin(['Healthcare', 'Energy'])]
 #test['size score'] = test.groupby('Sector')['Market Cap'].rank(ascending=True)
 
-returns = pd.read_csv(r'returnssmall.csv') #index=False)
+returns = pd.read_csv(r'returns.csv') #index=False)
 returns = returns[['Date', 'Symbols','Close', 'Volume']]
 returns['Date'] = pd.to_datetime(returns['Date'])
 
@@ -153,8 +153,10 @@ factors = dcc.Dropdown(
     searchable=True,
     #optionHeight= 50,
     placeholder="Select Factors",
-    style = {'color': 'black'}
-            #'display': 'inline-block'
+    style = {'color': 'black'},
+    className='DateInput2'
+            #'display': 'inline-block',
+
 
 )
 
@@ -202,22 +204,17 @@ Market Cap : Number of Shares Outstanding * Price Per Share i.e Market Value of 
 
 
 def build_banner():
-    return html.Div(
-        id="banner",
-        className="banner",
-        style={'width':'auto', 'marginRight':'auto'},
-        children=[
-            html.Div(
+    return html.Div(id="banner", className="banner", children=[html.Div(
+            children=[html.Div(
                 id="banner-logo",
                 children=[
                     html.Button(id="learn-more-button",
-                                children=dcc.Markdown(["** DEFINITIONS **"], style={'height':'50%', 'width':'100%'}, className='banner button'),
+                                children=["DEFINITIONS"],
                                 n_clicks=0),
-                ], className='banner-logo'
+                ],
 
             )
-        ]
-    )
+    ])])
 
 
 def generate_modal():
@@ -272,7 +269,7 @@ card1 = html.Div([
                              }
     ),
                   dcc.Markdown(
-                    "# **Strategy Finder**",)], className='header'),
+                    "# **Strategy Finder**")], className='header'),
                     # className='text-center text-primary mb-4',
                    # style={
                    #     'textAlign': 'center',
@@ -290,7 +287,9 @@ card1 = html.Div([
                 # ),
                 # html.Label('Select the weights you wish to assign to each factor'),
                 # html.Br(),
-                dcc.Markdown(description, style={'font-style': ['bold'],'color': 'white','padding-top':'5px','padding-bottom':'5px','fontSize':22}, className='header'),
+                html.Div([dcc.Markdown(description, style={'font-style': ['bold'],'color': 'white',
+                                                           'background-color': '#327a81', 'padding-top':'5px','padding-bottom':'5px','fontSize':22, 'textAlign': 'center'})],
+                         style={'align-text':'center'}),
                 html.Br(),
                 factors,
                 # dcc.Interval(max_intervals=1, id='inter'),
@@ -411,9 +410,11 @@ card1 = html.Div([
                              className = 'table-users')),
                 dbc.Row(
                     html.Div(id='slider_div_growth_wrapper',
+                             className='table-users2',
                              children=[
                                  html.Label('Dividend Growth Rate ANN %'),
                                  dcc.Slider(id='div_growth',
+
                                             min=0,
                                             max=200,
                                             marks=None,
@@ -424,8 +425,8 @@ card1 = html.Div([
                                                 "always_visible": True
                                             })
                              ],
-                             style={'display': 'block'},
-                             className = 'table-users')),
+                             style={'display': 'block'}
+                             )),
                 dbc.Row(
                     html.Div(id='slider_div_yield_wrapper',
                              children=[
@@ -610,34 +611,20 @@ card1 = html.Div([
 #     #dbc.Container(id = 'table_2')],
 #             className = 'container'))
 
-cardtable = html.Div(children=[
-    dbc.Card(
+cardtable = html.Div(id='tablewrapper',children=[dbc.Card(body=True,
         children=[html.Div([
             html.H2("Results")], className='header'),
-
-            dbc.Row(
-
-                dbc.Col(
-                    id='my_output',
+            html.Div(children=[dbc.Row(
+                    id='my_output')],
+                    # width={'size': 1700},,
                     className = 'table-users',
-                    # width={'size': 1700},
+                    style={'width': 1600, 'height': 350, 'display':'block'}
+     #           ),
+     #   ], style={'height': 525},
+     #   className='table-users',
+        )], className='table-users', style={'height' : 525})])
 
-                     style={
-                     'width': 1600,
-                     'height': 350}
-                ))
-        ], style={'height': 525},
-        className='table-users',
-        body=True)
-], #style={
-   # 'height': 700,
-   # 'width': 1700
-  #  'backgroundColor': 'white',
-  #  'textAlign': 'center'})
-#}
-)
-
-card3 = html.Div(
+card3 = html.Div(id='sectorwrapper',
     children=[
         dbc.Card(body=True,
             children=[html.Div([
@@ -649,9 +636,16 @@ card3 = html.Div(
                 dbc.Row(children=[dcc.Graph(id='price_plot', style={'height':500})], className='table-users'),
                 #html.Br(),
                 html.Div([html.H2('Distribution of Sectors')],style={'textAlign': 'center'}, className = 'header'),
-                dbc.Row(
-                        children=[
-                            dcc.Graph(id='sector_pie', style={'textAlign':'center', 'width': 'auto', 'height':600}, className = 'donut')]
+                html.Div(
+                        children=[dcc.Graph(id='sector_pie')], #figure= {'layout': {
+                    #'title': 'Dash Data Visualization',
+                    #'autosize': True,
+                   # 'legend': {'x': 1.02},
+                   # 'legend': dict(orientation='v',yanchor='top',xanchor='right',y=1,x=100, r=100),
+                   # 'margin': dict(r=20)}}
+                    #style={'textAlign':'center', 'width': 'auto', 'height':600}, className = 'donut'
+
+
                         #],  # , s))],
                     #    className="container"
 
@@ -665,7 +659,7 @@ card3 = html.Div(
     #},
    # className=
    # fluid=False
-    )], className = 'table-users')
+    )], className = 'table-users', style={'display':'block'})
 
 header = html.Div(children=[
     html.H1(
@@ -686,10 +680,9 @@ import json
 
 app.title = 'ELA Strategy Selector'
 #dash_table.DataTable(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])
-app.layout = html.Div(
-    className= 'big-app-container',
-    children=[html.Div(className='app-container', children=[build_banner()]), generate_modal(),  card1, cardtable, card3,
-              ]#generate_modal(),
+app.layout = html.Div(children=[build_banner(), html.Div([generate_modal(),  card1, cardtable, card3])])
+
+              #generate_modal(),
     # style = {
     #    'textAlign' : 'left',
     #    'backgroundColor' : 'lightblue',
@@ -706,7 +699,24 @@ app.layout = html.Div(
     #    'fontSize': 19
     #},
     #fluid=True)
-)
+
+
+#@app.callback(Output('tablewrapper', 'style'),
+#              [Input('factors', 'value')])
+#def update_results(factor):
+#    if  (len(factor) > 1):
+#        return {'display': 'block'}
+#    else:
+#        return {'display': 'none'}
+
+#@app.callback(Output('sectorwrapper', 'style'),
+#              [Input('factors', 'value')])
+#def update_pie(factor):
+#    if  (len(factor) > 1):
+#        return {'display': 'block'}
+#    else:
+#        return {'display': 'none'}
+
 
 @app.callback(Output('slider_rev_growth_wrapper', 'style'),
               [Input('factors', 'value')])
@@ -1218,11 +1228,15 @@ def create_graph(df_f, starts, ends, df=returns):
               Input(component_id='my_output3', component_property='data'))
 def create_sector_pie(dat):
     df_l = pd.read_json(dat).dropna()
-    fig = px.pie(df_l['Sector'],
-                 values=df_l['Sector'].value_counts(),
-                 names=df_l['Sector'].unique(),
-                 hole=.7)
+    fig = px.histogram(df_l,
+        #histfunc='count',
+                    x= 'Sector',
+                    color='Sector')
+                 #x=[df_l['Sector'].value_counts()])
+                 #x=[df_l['Sector'].unique()])
+                 #hole=.7)
     fig.update_layout(
+        yaxis_title='Count of Sector',
         title="",
         title_x=0.19,
          title_y = 0.5,
@@ -1231,8 +1245,10 @@ def create_sector_pie(dat):
             'r': 0
         },
         font=dict(family="Open Sans','sans-serif", size=15, color="black"))
+    fig.layout.plot_bgcolor = 'white'
 
-    fig.update_traces(textposition='inside', textinfo="label+percent")
+    #fig.update_traces(textposition='inside', textinfo="label+percent")
+    fig.layout.update(showlegend=False)
     return fig
 
 
