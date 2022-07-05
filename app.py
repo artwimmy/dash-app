@@ -145,9 +145,9 @@ datepicker = dcc.DatePickerRange(
     #className='header'
 )
 factors = dcc.Dropdown(
-    id = 'factors',                
-    options = options, 
-    value = options[0]['value'],   
+    id = 'factors',
+    options = options,
+    value = options[0]['value'],
     multi = True,
     clearable = True,
     searchable=True,
@@ -171,7 +171,7 @@ app = Dash(__name__, suppress_callback_exceptions=True, #external_stylesheets=[t
 server = app.server
 
 description = """
-** An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and 
+** An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and
 weight the factors according to your preference. The stocks are then ranked providing you the top stocks to buy according to your inputs. **
 """
 
@@ -1269,9 +1269,9 @@ def update_click_output(button_click, close_click):
 
     return {"display": "none"}
 
-    
-if __name__ == '__main__': 
-    app.run_server(debug=True, port=8060)
+
+if __name__ == '__main__':
+    app.run_server(debug=False, port=8060)
 
 
 
