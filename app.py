@@ -265,16 +265,18 @@ card1 = html.Div([
                     html.Img(src=app.get_asset_url('newimage.png'),
                              style={
                                  'height': '30%',
-                                 'width': '15%'
+                                 'width': '15%',
+                                 'textAlign': 'center'
                              }
     ),
                   dcc.Markdown(
-                    "# **Strategy Finder**")], className='header'),
+                    "# **Strategy Finder**")], className='header text-center text-primary align-self-center',
+                    style={
+                                           'textAlign': 'center',
+                                           'color': 'black'
+                                       }
+                    ),
                     # className='text-center text-primary mb-4',
-                   # style={
-                   #     'textAlign': 'center',
-                   #     'color': 'black'
-    #                }
 
                 #html.Br(),
                 # dbc.Row(
@@ -618,7 +620,7 @@ cardtable = html.Div(id='tablewrapper',children=[dbc.Card(body=True,
                     id='my_output')],
                     # width={'size': 1700},,
                     className = 'table-users',
-                    style={'width': 1600, 'height': 350, 'display':'block'}
+                    style={'width': '100%', 'height': 350, 'display':'block'}
      #           ),
      #   ], style={'height': 525},
      #   className='table-users',
@@ -1127,7 +1129,8 @@ def update_frame(factors,
                                    'fontWeight': 'bold',
                                    'whiteSpace': 'normal',
                                    'border': '2px solid black',
-                                   'font-family': ['Open Sans', 'sans-serif']
+                                   'font-family': ['Open Sans', 'sans-serif'],
+                                   'textAlign': 'center',
                                },
                                style_data_conditional=[  # style_data.c refers only to data rows
                                    {
