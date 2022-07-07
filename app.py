@@ -175,6 +175,15 @@ description = """
 weight the factors according to your preference. The stocks are then ranked providing you the top stocks to buy according to your inputs. **
 """
 
+closebutton = html.Div(
+                                className="close-container",
+                                children=html.Button("Close",
+                                                     id="markdown_close",
+                                                     n_clicks=0,
+                                                     className="closeButton",
+                                                    # style={'marginLeft': 2}
+                                                     ))
+
 explanation = """
 ## Abbreviations ##
 
@@ -243,7 +252,11 @@ def generate_modal():
                                                       #    'marginRight': 200,
                                                       #    'backgroundColor':
                                                       #    'lightgreen',
-                                                          'color': 'white'
+                                                          'color': 'black',
+                                                          'backgroundColor': 'lightgray',
+                                                          'borderRadius': '15px',
+                                                          'position': 'absolute',
+                                                          'padding': '20px',
                                                       }
                     ),
                             ),
