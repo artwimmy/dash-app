@@ -1,0 +1,38 @@
+.DateInput2 {
+font-weight: 200;
+font-size: 14px;
+line-height: 12px;
+color: black;
+margin: 0;
+padding: 1px;
+background: rgba(0,0,0,0);
+position: relative;
+display: inline-block;
+width: auto;
+vertical-align: middle;
+border: 5px solid rgba(61, 181, 105);
+border-radius: 5px;
+box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.VirtualizedSelectFocusedOption {
+    background-color: white;
+    color: black;
+}
+.VirtualizedSelectOption {
+    background-color: white;
+    color: black;
+}
+
+.table-users2 {
+	 border: 1px solid #327a81;
+	 border-radius: 10px;
+	 box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+	 }
+
+.sometww{max-width: calc(200% - 2em);
+	 margin: 1em auto;
+	 overflow: hidden;
+	 width: 1600px;
+	 height:auto
+}

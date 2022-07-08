@@ -145,9 +145,9 @@ datepicker = dcc.DatePickerRange(
     #className='header'
 )
 factors = dcc.Dropdown(
-    id = 'factors',
-    options = options,
-    value = options[0]['value'],
+    id = 'factors',                
+    options = options, 
+    value = options[0]['value'],   
     multi = True,
     clearable = True,
     searchable=True,
@@ -171,18 +171,9 @@ app = Dash(__name__, suppress_callback_exceptions=True, #external_stylesheets=[t
 server = app.server
 
 description = """
-** An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and
+** An application that gives you the optimal companies to buy based on your investing strategy. Select your desired factors for the companies you wish to invest in and 
 weight the factors according to your preference. The stocks are then ranked providing you the top stocks to buy according to your inputs. **
 """
-
-closebutton = html.Div(
-                                className="close-container",
-                                children=html.Button("Close",
-                                                     id="markdown_close",
-                                                     n_clicks=0,
-                                                     className="closeButton",
-                                                    # style={'marginLeft': 2}
-                                                     ))
 
 explanation = """
 ## Abbreviations ##
@@ -252,11 +243,7 @@ def generate_modal():
                                                       #    'marginRight': 200,
                                                       #    'backgroundColor':
                                                       #    'lightgreen',
-                                                          'color': 'black',
-                                                          'backgroundColor': 'lightgray',
-                                                          'borderRadius': '15px',
-                                                          'position': 'absolute',
-                                                          'padding': '20px',
+                                                          'color': 'white'
                                                       }
                     ),
                             ),
@@ -278,18 +265,16 @@ card1 = html.Div([
                     html.Img(src=app.get_asset_url('newimage.png'),
                              style={
                                  'height': '30%',
-                                 'width': '15%',
-                                 'textAlign': 'center'
+                                 'width': '15%'
                              }
     ),
                   dcc.Markdown(
-                    "# **Strategy Finder**")], className='header text-center text-primary align-self-center',
-                    style={
-                                           'textAlign': 'center',
-                                           'color': 'black'
-                                       }
-                    ),
+                    "# **Strategy Finder**")], className='header'),
                     # className='text-center text-primary mb-4',
+                   # style={
+                   #     'textAlign': 'center',
+                   #     'color': 'black'
+    #                }
 
                 #html.Br(),
                 # dbc.Row(
@@ -425,7 +410,7 @@ card1 = html.Div([
                              className = 'table-users')),
                 dbc.Row(
                     html.Div(id='slider_div_growth_wrapper',
-                             className='table-users2',
+                             className='table-users',
                              children=[
                                  html.Label('Dividend Growth Rate ANN %'),
                                  dcc.Slider(id='div_growth',
@@ -600,14 +585,14 @@ card1 = html.Div([
                 # style={"width": "auto"}) ,
                 dcc.Store(id='my_output2'),
                 dcc.Store(id='my_output3')],
-                style={'padding-bottom': '50px'},
+                style={'padding-bottom': '0px'},
                 className='table-users')],body=True)],
 
         #className='header',
         style={
         #'padding-bottom': '100px',
         #'backgroundColor': 'white',
-        'width': 'auto'}
+        }
         )
 
     # width={'size' :'8', 'offset':3, 'margin':3},
@@ -630,14 +615,13 @@ cardtable = html.Div(id='tablewrapper',children=[dbc.Card(body=True,
         children=[html.Div([
             html.H2("Results")], className='header'),
             html.Div(children=[dbc.Row(
-                    id='my_output')],
+                    id='my_output' )],className='table', style={},
                     # width={'size': 1700},,
-                    className = 'table-users',
-                    style={'width': '100%', 'height': 350, 'display':'block'}
+                   # style={'display':'block'}
      #           ),
      #   ], style={'height': 525},
      #   className='table-users',
-        )], className='table-users', style={'height' : 525})])
+        )],style={'padding-bottom': '0px'}, className='table-users')])
 
 card3 = html.Div(id='sectorwrapper',
     children=[
@@ -648,11 +632,10 @@ card3 = html.Div(id='sectorwrapper',
                 html.Div([html.H2('Resulting Stocks Performance',
                         style={'textAlign': 'center'}),
                 dbc.Row(datepicker)],className = 'header'),
-                dbc.Row(children=[dcc.Graph(id='price_plot', style={'height':500})], className='table-users'),
-                #html.Br(),
-                html.Div([html.H2('Distribution of Sectors')],style={'textAlign': 'center'}, className = 'header'),
-                html.Div(
-                        children=[dcc.Graph(id='sector_pie')], #figure= {'layout': {
+
+                html.Div(children=[dbc.Row(children=[dcc.Graph(id='price_plot' )])])]#style={'height':500}
+                #html.Br()
+                 #figure= {'layout': {
                     #'title': 'Dash Data Visualization',
                     #'autosize': True,
                    # 'legend': {'x': 1.02},
@@ -667,25 +650,20 @@ card3 = html.Div(id='sectorwrapper',
 
          #   body=True
         ) #className='table-users')
-])]
+], className='table-users'),
+      #  html.Br(),
     #style={
     #    'backgroundColor': 'white',
     #    'width': 1700
     #},
    # className=
    # fluid=False
-    )], className = 'table-users', style={'display':'block'})
 
-header = html.Div(children=[
-    html.H1(
-        "# **Strategy Finder**",
-        # className='text-center text-primary mb-4',
-     #   style={
-     #       'textAlign': 'center',
-     #       'color': 'black'
- #       }
-)
-])
+    dbc.Card(body=True,
+             children=[html.Div([html.H2('Distribution of Sectors')],style={'textAlign': 'center'}, className = 'header'),
+                html.Div(
+                        children=[dcc.Graph(id='sector_pie')])],className = 'table-users')], style={'display':'block'})
+
 
 #from dateutil.relativedelta import relativedelta
 #import datetime
@@ -1123,7 +1101,7 @@ def update_frame(factors,
                                # fill_width=False,
                                style_data={
                                    'whiteSpace': 'normal',
-                                   'height': 12,
+                                   'height': 'auto',
                                    'width': 'auto',
                                    'font-family': ['Open Sans', 'sans-serif']
                                },
@@ -1142,8 +1120,7 @@ def update_frame(factors,
                                    'fontWeight': 'bold',
                                    'whiteSpace': 'normal',
                                    'border': '2px solid black',
-                                   'font-family': ['Open Sans', 'sans-serif'],
-                                   'textAlign': 'center',
+                                   'font-family': ['Open Sans', 'sans-serif']
                                },
                                style_data_conditional=[  # style_data.c refers only to data rows
                                    {
@@ -1161,7 +1138,7 @@ def update_frame(factors,
                                    }
                                ],
                                style_table={
-                                   'height': '800px',
+                                   'height': 'auto',
                                    'overflowX': 'auto',
                                    # 'overflowY': 'None',
                                    'width': 'auto',
@@ -1285,9 +1262,9 @@ def update_click_output(button_click, close_click):
 
     return {"display": "none"}
 
-
-if __name__ == '__main__':
-    app.run_server(debug=False)
+    
+if __name__ == '__main__': 
+    app.run_server(debug=True, port=8000)
 
 
 
